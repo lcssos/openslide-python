@@ -55,6 +55,8 @@ class DeepZoomGenerator(object):
         # - Pixel coordinates within the slide level (l_)
         # - Pixel coordinates within slide level 0 (l0_)
 
+        print("deep zoom generator init")
+
         self._osr = osr
         self._z_t_downsample = tile_size
         self._z_overlap = overlap
@@ -62,10 +64,16 @@ class DeepZoomGenerator(object):
 
         # Precompute dimensions
         # Slide level and offset
+
+        print(limit_bounds)
+
         if limit_bounds:
             # Level 0 coordinate offset
             self._l0_offset = tuple(int(osr.properties.get(prop, 0))
                         for prop in self.BOUNDS_OFFSET_PROPS)
+
+            print(self._l0_offset)
+
             # Slide level dimensions scale factor in each axis
             size_scale = tuple(int(osr.properties.get(prop, l0_lim)) / l0_lim
                         for prop, l0_lim in zip(self.BOUNDS_SIZE_PROPS,
@@ -121,6 +129,7 @@ class DeepZoomGenerator(object):
     @property
     def level_count(self):
         """The number of Deep Zoom levels in the image."""
+        print('self dz levels')
         return self._dz_levels
 
     @property
