@@ -23,9 +23,11 @@
 from __future__ import print_function
 import json
 from multiprocessing import Process, JoinableQueue
+
+
 import openslide
 from openslide import open_slide, ImageSlide
-from openslide.deepzoom import DeepZoomGenerator
+# from openslide.deepzoom import DeepZoomGenerator
 from optparse import OptionParser
 import os
 import re
@@ -33,11 +35,12 @@ import shutil
 import sys
 from unicodedata import normalize
 
+from openslide.deepzoom import DeepZoomGenerator
 from tile_worker import TileWorker
 
 VIEWER_SLIDE_NAME = 'slide'
 
-
+from deepzoom_image_tiler import DeepZoomImageTiler
 
 
 class DeepZoomStaticTiler(object):
@@ -84,12 +87,27 @@ class DeepZoomStaticTiler(object):
         print('start dz')
         dz = DeepZoomGenerator(image, self._tile_size, self._overlap, limit_bounds=self._limit_bounds)
 
+        print('-'*30)
+        print('dz.level_count')
         print(dz.level_count)
 
-        # tiler = DeepZoomImageTiler(dz, basename, self._format, associated, self._queue)
+        print('-' * 30)
+        print('dz.level_tiles')
+        print(dz.level_tiles)
+
+        print('-' * 30)
+        print('dz.level_dimensions')
+        print(dz.level_dimensions)
+
+        print('-' * 30)
+        print('dz.tile_count')
+        print(dz.tile_count)
+
+
+        tiler = DeepZoomImageTiler(dz, basename, self._format, associated, self._queue)
         # tiler.run()
-        #
-        # self._dzi_data[self._url_for(associated)] = tiler.get_dzi()
+
+        self._dzi_data[self._url_for(associated)] = tiler.get_dzi()
 
     def _url_for(self, associated):
         if associated is None:
@@ -169,7 +187,7 @@ if __name__ == '__main__':
                 type='int', default=90,
                 help='JPEG compression quality [90]')
     parser.add_option('-r', '--viewer', dest='with_viewer',
-                action='store_true',default=True,
+                action='store_true',default=False,
                 help='generate directory tree with HTML viewer')
     parser.add_option('-s', '--size', metavar='PIXELS', dest='tile_size',
                 type='int', default=254,
