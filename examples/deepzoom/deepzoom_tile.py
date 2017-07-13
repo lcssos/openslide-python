@@ -105,7 +105,7 @@ class DeepZoomStaticTiler(object):
 
 
         tiler = DeepZoomImageTiler(dz, basename, self._format, associated, self._queue)
-        # tiler.run()
+        tiler.run()
 
         self._dzi_data[self._url_for(associated)] = tiler.get_dzi()
 

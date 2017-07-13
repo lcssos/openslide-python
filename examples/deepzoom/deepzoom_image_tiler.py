@@ -21,19 +21,19 @@ class DeepZoomImageTiler(object):
         self._write_dzi()
 
     def _write_tiles(self):
-        # print(self._dz.level_count)
+        # print(self._dz.level_count) 0:18
         for level in range(self._dz.level_count):
             tiledir = os.path.join("%s_files" % self._basename, str(level))
+            # print(tiledir)
             if not os.path.exists(tiledir):
                 os.makedirs(tiledir)
             cols, rows = self._dz.level_tiles[level]
             for row in range(rows):
                 for col in range(cols):
-                    tilename = os.path.join(tiledir, '%d_%d.%s' % (
-                                    col, row, self._format))
+                    tilename = os.path.join(tiledir, '%d_%d.%s' % (col, row, self._format))
+                    # print(tilename)
                     if not os.path.exists(tilename):
-                        self._queue.put((self._associated, level, (col, row),
-                                    tilename))
+                        self._queue.put((self._associated, level, (col, row),tilename))
                     self._tile_done()
 
     def _tile_done(self):

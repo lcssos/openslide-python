@@ -5,8 +5,7 @@ from openslide.deepzoom import DeepZoomGenerator
 class TileWorker(Process):
     """A child process that generates and writes tiles."""
 
-    def __init__(self, queue, slidepath, tile_size, overlap, limit_bounds,
-                quality):
+    def __init__(self, queue, slidepath, tile_size, overlap, limit_bounds, quality):
         Process.__init__(self, name='TileWorker')
         self.daemon = True
         self._queue = queue
@@ -27,9 +26,14 @@ class TileWorker(Process):
                 self._queue.task_done()
                 break
             associated, level, address, outfile = data
+            # print(data)
             if last_associated != associated:
                 dz = self._get_dz(associated)
                 last_associated = associated
+
+            # args, z_size = dz._get_tile_info(level, address)
+            # print(z_size)
+
             tile = dz.get_tile(level, address)
             tile.save(outfile, quality=self._quality)
             self._queue.task_done()
@@ -39,5 +43,4 @@ class TileWorker(Process):
             image = ImageSlide(self._slide.associated_images[associated])
         else:
             image = self._slide
-        return DeepZoomGenerator(image, self._tile_size, self._overlap,
-                    limit_bounds=self._limit_bounds)
+        return DeepZoomGenerator(image, self._tile_size, self._overlap, limit_bounds=self._limit_bounds)
