@@ -187,7 +187,7 @@ if __name__ == '__main__':
                 type='int', default=90,
                 help='JPEG compression quality [90]')
     parser.add_option('-r', '--viewer', dest='with_viewer',
-                action='store_true',default=False,
+                action='store_true',default=True,
                 help='generate directory tree with HTML viewer')
     parser.add_option('-s', '--size', metavar='PIXELS', dest='tile_size',
                 type='int', default=254,
